@@ -1,0 +1,68 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: arunmamgai-poi-gateway-app-dev
+  annotations:
+    argocd/app-name: arunmamgai-poi-gateway-app-dev
+    backstage.io/kubernetes-id: arunmamgai-poi-gateway-app
+    backstage.io/kubernetes-namespace: arunmamgai
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: rhdh-atl/arunmamgai-gateway
+    janus-idp.io/tekton-enabled: 'true'
+  tags:
+    - java
+    - quarkus
+    - maven
+    - workshop
+  links:
+    - url: https://console-openshift-console.apps.j0i9yf30.eastus2.aroapp.io/dev-pipelines/ns/arunmamgai/
+      title: Pipelines
+      icon: web
+    - url: https://console-openshift-console.apps.j0i9yf30.eastus2.aroapp.io/k8s/ns/arunmamgai/deployments/arunmamgai-poi-gateway-app
+      title: Deployment
+      icon: web
+    - url: https://devspaces.apps.j0i9yf30.eastus2.aroapp.io/#https://github.com/rhdh-atl/arunmamgai-gateway?che-editor=che-incubator/che-code/latest&devfilePath=.devfile-vscode.yaml
+      title: OpenShift Dev Spaces (VS Code)
+      icon: web
+spec:
+  type: service
+  lifecycle: production
+  owner: "user:default/arunmamgai"
+  system: workshop-system-arunmamgai
+  providesApis:
+    - gateway-api-arunmamgai
+  consumesApis:
+    - backend-api-arunmamgai
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: workshop-system-arunmamgai
+  tags:
+    - backstage
+    - janus-idp
+    - openshift
+    - workshop
+    - rh-summit
+spec:
+  owner: "user:default/arunmamgai"
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: gateway-api-arunmamgai
+  description: API surface exposed to interact with Backends (summit POIs + parks data) via the Gateway
+  links:
+    - url: http://arunmamgai-poi-gateway-app-arunmamgai.apps.j0i9yf30.eastus2.aroapp.io/q/swagger-ui
+      title: Swagger UI
+      icon: web
+    - url: https://github.com/rhdh-atl/arunmamgai-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
+      title: API Spec
+      icon: code
+spec:
+  type: openapi
+  lifecycle: production
+  owner: "user:default/arunmamgai"
+  system: workshop-system-arunmamgai
+  definition:
+    $text: https://github.com/rhdh-atl/arunmamgai-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
